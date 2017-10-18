@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
 #include "Main.h"
 
-#include <fstream>
 #include <inttypes.h>
 #include <ws2tcpip.h>
 
@@ -115,7 +114,7 @@ class QY265Encoder : public VideoEncoder
 
     int frameShift;
 #ifdef DUMP_BS
-    std::fstream m_bs;
+    FILE* m_pbsfile;
 #endif
     inline void ClearPackets()
     {
@@ -142,7 +141,7 @@ public:
     QY265Encoder(int fps, int width, int height, int quality, CTSTR preset, bool bUse444, ColorDescription &colorDesc, int maxBitrate, int bufferSize, bool bUseCFR)
     {
 #ifdef DUMP_BS
-        m_bs.open("bs.265",std::ios::binary|std::ios::out);
+        m_pbsfile = fopen("bs.265","wb");
 #endif
         curPreset = preset;
 
@@ -328,7 +327,10 @@ public:
         ClearPackets();
         QY265EncoderClose(qy265);
 #ifdef DUMP_BS
-        m_bs.close();
+        if (m_pbsfile){
+            fclose(m_pbsfile);
+            m_pbsfile = NULL;
+        }
 #endif
     }
     virtual bool isQY265() { return true; }
@@ -418,7 +420,9 @@ public:
         {
             QY265Nal &nal = nalOut[i];
 #ifdef DUMP_BS
-            m_bs.write((char*)nal.pPayload, nal.iSize);
+            if (m_pbsfile){
+                fwrite((char*)nal.pPayload, nal.iSize, 1, m_pbsfile);
+            }
 #endif
 //             if (nal.naltype == NAL_SEI)
 //             {
