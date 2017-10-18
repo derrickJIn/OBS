@@ -508,6 +508,7 @@ INT_PTR SettingsAdvanced::ProcMessage(UINT message, WPARAM wParam, LPARAM lParam
 
                 hwndTemp = GetDlgItem(hwnd, IDC_PRESET_QY265);
                 static const CTSTR qy265_preset_names[16] = {
+                    TEXT("superfast"),
                     TEXT("veryfast"),
                     TEXT("fast"),
                     TEXT("medium"),
@@ -516,7 +517,7 @@ INT_PTR SettingsAdvanced::ProcMessage(UINT message, WPARAM wParam, LPARAM lParam
                 for (int i = 0; qy265_preset_names[i]; i++)
                     SendMessage(hwndTemp, CB_ADDSTRING, 0, (LPARAM)qy265_preset_names[i]);
 
-                LoadSettingComboString(hwndTemp, TEXT("Video Encoding"), TEXT("QY265Preset"), qy265_preset_names[0]);
+                LoadSettingComboString(hwndTemp, TEXT("Video Encoding"), TEXT("QY265Preset"), qy265_preset_names[1]);
 
                 hwndTemp = GetDlgItem(hwnd, IDC_QY265TUNE);
                 static const CTSTR qy265_tune_names[16] = {
@@ -529,7 +530,7 @@ INT_PTR SettingsAdvanced::ProcMessage(UINT message, WPARAM wParam, LPARAM lParam
                 for (int i = 0; qy265_tune_names[i]; i++)
                     SendMessage(hwndTemp, CB_ADDSTRING, 0, (LPARAM)qy265_tune_names[i]);
 
-                LoadSettingComboString(hwndTemp, TEXT("Video Encoding"), TEXT("QY265Tune"), qy265_tune_names[1]);
+                LoadSettingComboString(hwndTemp, TEXT("Video Encoding"), TEXT("QY265Tune"), qy265_tune_names[0]);
 
                 hwndTemp = GetDlgItem(hwnd, IDC_QSVPRESET);
                 static const struct {

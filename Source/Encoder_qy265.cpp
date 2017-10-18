@@ -208,11 +208,12 @@ public:
         LPSTR lpPreset = curPreset.CreateUTF8String();
         LPSTR lpTune = curTune.CreateUTF8String();
         LPSTR lpLatency = curLatency.CreateUTF8String();
-        if (QY265ConfigDefaultPreset(&paramData, lpPreset, "default", "zerolatency"))
+        if (QY265ConfigDefaultPreset(&paramData, lpPreset, lpTune, (lpLatency == NULL ? (char*)(qy265_latency_names[1]) : lpLatency)))
             Log(TEXT("Failed to set qy265 defaults: %s/%s/%s"), curPreset.Array(), curTune.Array(), curLatency.Array());
 
         Free(lpTune);
         Free(lpPreset);
+        Free(lpLatency);
 
         this->width = width;
         this->height = height;
@@ -356,7 +357,7 @@ public:
             picIn = NULL;
         }
         QY265Nal *nalOut;
-        int nalNum;
+        int nalNum = 0;
 
         packets.Clear();
         ClearPackets();
